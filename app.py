@@ -63,9 +63,9 @@ def home():
 	elif status_filter == "completed":
 		base_query = base_query.filter_by(completed=True)
 
-	overdue_tasks = base_query.filter(Task.completed == False, Task.due_date < today).order_by(Task.due_date.asc(), Task.priority.desc()).all()
-	upcoming_tasks = base_query.filter(Task.completed == False, (Task.due_date == None) | (Task.due_date >= today)).order_by(Task.due_date.asc().nullslast(), Task.priority.desc()).all()
-	completed_tasks = base_query.filter(Task.completed == True).order_by(Task.due_date.asc().nullslast(), Task.priority.desc()).all()
+	overdue_tasks = base_query.filter(Task.completed == False, Task.due_date < today).order_by(Task.due_date.asc(), Task.due_time.asc().nullslast(), Task.priority.desc()).all()
+	upcoming_tasks = base_query.filter(Task.completed == False, (Task.due_date == None) | (Task.due_date >= today)).order_by(Task.due_time.asc().nullslast(), Task.due_date.asc().nullslast(), Task.priority.desc()).all()
+	completed_tasks = base_query.filter(Task.completed == True).order_by(Task.due_date.asc().nullslast(), Task.due_time.asc().nullslast(), Task.priority.desc()).all()
 
 	return render_template("home.html", overdue_tasks=overdue_tasks, upcoming_tasks=upcoming_tasks, completed_tasks=completed_tasks, current_date=today,app_name=app.config['APP_NAME'])
 
@@ -200,6 +200,22 @@ def edit(id):
 	db.session.commit()
 	flash("Task updated successfully!")
 	return redirect(url_for("home"))
+
+@app.route("/calendar")
+@login_required
+def calendar():
+    tasks = Task.query.filter_by(user_id=current_user.id).all()
+    events = [
+        {
+            "title": t.content,
+            "start": f"{t.due_date}T{t.due_time.strftime('%H:%M') if t.due_time else '00:00'}",
+            "color": "#28a745" if t.completed else "#007bff"
+        }
+        for t in tasks if t.due_date
+    ]
+    return render_template("calendar.html", events=events, app_name=app.config["APP_NAME"])
+
+
 
 if __name__ == "__main__":
 	app.run(debug=True)
