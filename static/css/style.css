@@ -1,0 +1,90 @@
+/* Hover animations */
+.btn-outline-secondary:hover,
+.btn-outline-danger:hover {
+  transform: scale(1.05);
+  transition: 0.2s ease-in-out;
+}
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+  .form-check-label {
+    font-size: 0.95rem;
+  }
+
+  .btn {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.5rem;
+  }
+
+  .modal-content {
+    font-size: 0.95rem;
+  }
+}
+
+/* Light mode background */
+body {
+  background-color: #0d6efd !important; /* Bootstrap's primary blue */
+  color: white;
+}
+
+/* Optional override for body text readability */
+.card, .list-group-item, .modal-content {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Dark mode background */
+body.dark-mode {
+  background-color: #0d6efd !important;
+  color: #e4e4e4;
+}
+
+body.dark-mode .card,
+body.dark-mode .list-group-item,
+body.dark-mode .modal-content {
+  background-color: #1e1e1e;
+  color: #e4e4e4;
+  border-color: #333;
+}
+
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: #f8f9fa; /* Light Bootstrap gray */
+  border-bottom: 1px solid #dee2e6;
+}
+
+/* Fix: Completed task readability in dark mode */
+body.dark-mode .form-check-label.text-muted {
+  color: #aaa !important;
+  text-decoration: line-through;
+}
+
+body.dark-mode {
+  background-color: #0d6efd; 
+  color: #e4e4e4;
+} 
+
+/* Smooth fade/slide-in on task addition */
+.task-enter {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease-out;
+}
+
+.task-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Smooth fade-out on delete */
+.task-exit {
+  opacity: 1;
+  transition: opacity 0.3s ease-out;
+}
+
+.task-exit-active {
+  opacity: 0;
+}
